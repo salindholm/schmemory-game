@@ -40,7 +40,7 @@ const resultDisplay = document.querySelector("#result");
 // Variable to be used to collect card elements
 let selectedCardElements;
 
-// Variable to used to  keep count of matched cards
+// Variable to used to keep count of matched cards
 let matchedCardCount;
 
 // Variable to used to pause flipping cards
@@ -48,7 +48,7 @@ let flippingPause;
 
 document.addEventListener("DOMContentLoaded", () => {
 
-    //Function to initialize the game board
+    // Function to initialize the game board
     function init() {
         selectedCardElements = [];
         matchedCardCount = 0;
@@ -58,11 +58,11 @@ document.addEventListener("DOMContentLoaded", () => {
         gameCards.sort(() => 0.5 - Math.random());
     }
 
-    //Function to create game board with cards
+    // Function to create game board with cards
     function createBoard() {
         init();
 
-        //loop through each card and create its HTML
+        // Loop through each card and create its HTML
         for (let i = 0; i < gameCards.length; i++) {
             const cardElement = document.createElement("img");
             cardElement.setAttribute("src", "public/images/reggae.png");
@@ -72,25 +72,25 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    //Function to flip the selected card
+    // Function to flip the selected card
     function flipCard() {
-        // if there are two cards already flipped, do nothing
+        // If there are two cards already flipped, do nothing
         if (flippingPause) return;
 
-        // if the same card is clicked twice, do nothing
+        // If the same card is clicked twice, do nothing
         if (selectedCardElements.includes(this)) {
             return;
         }
-        // collect the card index, set the image to the card's image
+        // Collect the card index, set the image to the card's image
         const cardIndex = this.getAttribute("data-id");
         this.setAttribute("src", gameCards[cardIndex].img);
         selectedCardElements.push(this);
 
-        // if two cards have been flipped, check for match
+        // If two cards have been flipped, check for match
         if (selectedCardElements.length === 2) {
             flippingPause = true;
 
-            // set a timeout for 0.5 seconds to display the cards front side and after let user flip another card
+            // Set a timeout for 0.5 seconds to check for match and after let user flip another card
             setTimeout(() => {
                 checkForMatch();
                 flippingPause = false;
@@ -98,34 +98,40 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    //Function to check for matches
+    // Function to check for matches
     function checkForMatch() {
+
+        // Get the card elements
         const cardElementOne = selectedCardElements[0];
         const cardElementTwo = selectedCardElements[1];
 
+        // Get the cards from the game cards array
         const gameCardOne = gameCards[cardElementOne.getAttribute("data-id")];
         const gameCardTwo = gameCards[cardElementTwo.getAttribute("data-id")];
 
-        // if the two cards match add 2 to the matched card count
+        // If the two cards match add 2 to the matched card count
         if (gameCardOne.name === gameCardTwo.name) {
             matchedCardCount += 2;
-            // if the two cards do not match flip them back
+
+            // If the two cards do not match flip them back
         } else {
             cardElementOne.setAttribute("src", "public/images/reggae.png");
             cardElementTwo.setAttribute("src", "public/images/reggae.png");
         }
+
+        // Empty the selected card elements array for the next turn
         selectedCardElements = [];
 
-        //set the result display to the matched card pairs
+        // Set the result display to the matched card pairs
         resultDisplay.textContent = (matchedCardCount / 2).toString();
 
-        // if all cards have been matched, display a message
+        // If all cards have been matched, display a message
         if (matchedCardCount.length === gameCards.length) {
             resultDisplay.textContent = "Congratulations! You found them all!";
         }
     }
 
-    //Create button to start the game
+    // Create functionality to restart the game
     const restartButton = document.querySelector("#restart-button");
     restartButton.addEventListener("click", createBoard);
 
