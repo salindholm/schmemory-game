@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
         matchedCardCount = 0;
         flippingPause = false;
         grid.innerHTML = "";
-        resultDisplay.textContent = 0;
+        resultDisplay.textContent = "Score: 0";
         gameCards.sort(() => 0.5 - Math.random());
     }
 
@@ -65,11 +65,15 @@ document.addEventListener("DOMContentLoaded", () => {
         // Loop through each card and create its HTML
         for (let i = 0; i < gameCards.length; i++) {
             const cardElement = document.createElement("img");
-            cardElement.setAttribute("src", "public/images/reggae.png");
+            flipCardBack(cardElement);
             cardElement.setAttribute("data-id", i);
             cardElement.addEventListener("click", flipCard);
             grid.appendChild(cardElement);
         }
+    }
+
+    function flipCardBack(element) {
+        element.setAttribute("src", "public/images/reggae.png");
     }
 
     // Function to flip the selected card
@@ -78,9 +82,8 @@ document.addEventListener("DOMContentLoaded", () => {
         if (flippingPause) return;
 
         // If the same card is clicked twice, do nothing
-        if (selectedCardElements.includes(this)) {
-            return;
-        }
+        if (selectedCardElements.includes(this)) return;
+
         // Collect the card index, set the image to the card's image
         const cardIndex = this.getAttribute("data-id");
         this.setAttribute("src", gameCards[cardIndex].img);
@@ -115,18 +118,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // If the two cards do not match flip them back
         } else {
-            cardElementOne.setAttribute("src", "public/images/reggae.png");
-            cardElementTwo.setAttribute("src", "public/images/reggae.png");
+            flipCardBack(cardElementOne);
+            flipCardBack(cardElementTwo);
         }
 
         // Empty the selected card elements array for the next turn
         selectedCardElements = [];
 
         // Set the result display to the matched card pairs
-        resultDisplay.textContent = (matchedCardCount / 2).toString();
+        resultDisplay.textContent = `Score: ${
+            (matchedCardCount / 2).toString()
+        }`;
 
         // If all cards have been matched, display a message
-        if (matchedCardCount.length === gameCards.length) {
+        if (matchedCardCount === gameCards.length) {
             resultDisplay.textContent = "Congratulations! You found them all!";
         }
     }
