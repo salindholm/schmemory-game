@@ -35,7 +35,7 @@ const gameCards = [...cards, ...cards];
 const grid = document.querySelector("#grid");
 
 // Variable to create the result display
-const resultDisplay = document.querySelector("#result");
+const resultDisplay = document.querySelector("#resultDisplay");
 
 // Variable to be used to collect card elements
 let selectedCardElements;
@@ -72,6 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    // Function to flip card back to backside image
     function flipCardBack(element) {
         element.setAttribute("src", "public/images/reggae.png");
     }
